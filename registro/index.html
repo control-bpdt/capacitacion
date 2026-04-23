@@ -134,7 +134,7 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz5zXUwVstXjdKu556XxcDX3hd3nrGznpUCZCusO6QlkhQ6nPY7hUaBuhWcqIeimSqTag/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxw9OhCJZHllXEDfyslOyON-dsUYQ4w1785dRoTWos80MctSa8-Ql9WVRCHl83T1m9Gew/exec";
 
     const canvas = document.getElementById("signatureCanvas");
     const ctx = canvas.getContext("2d");
@@ -230,21 +230,22 @@
     }
 
     async function loadBootstrap() {
-      try {
-        const result = await postJson({ action: "bootstrap" });
+  try {
+    const result = await postJson({ action: "bootstrap" });
 
-        if (!result.ok) {
-          throw new Error(result.error || "No se pudo cargar listas.");
-        }
-
-        fillSelect(companySelect, result.empresas || [], "Seleccione una empresa");
-        fillSelect(positionSelect, result.cargos || [], "Seleccione un puesto");
-      } catch (error) {
-        fillSelect(companySelect, [], "Error cargando empresas");
-        fillSelect(positionSelect, [], "Error cargando cargos");
-        showMessage("No se pudieron cargar las listas maestras.", "error");
-      }
+    if (!result.ok) {
+      throw new Error(result.error || "No se pudo cargar listas.");
     }
+
+    fillSelect(companySelect, result.empresas || [], "Seleccione una empresa");
+    fillSelect(positionSelect, result.cargos || [], "Seleccione un puesto");
+  } catch (error) {
+    console.error("Error bootstrap:", error);
+    fillSelect(companySelect, [], "Error cargando empresas");
+    fillSelect(positionSelect, [], "Error cargando cargos");
+    showMessage("Error cargando listas: " + error.message, "error");
+  }
+}
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
