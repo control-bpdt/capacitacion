@@ -343,7 +343,7 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw9uF4tTRMGnjYFHqlGyZvdmG16kwP4bXtyBLwE1HjQNGXZHvJYWKmdVhtQOFQ3OEpDUg/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxEBd837_qvVTQ8E8Q2hJ_E9BnzzCGE1Glh63NxpZgAVdViFGOp0htIZqd77WMfaW0McQ/exec";
 
     const empresaSelect = document.getElementById("empresa");
     const puestoSelect = document.getElementById("puesto");
@@ -543,7 +543,7 @@
           evaluation: document.getElementById("evaluation").value,
           exhibitorName: document.getElementById("exhibitorName").value.trim(),
           exhibitorDni: document.getElementById("exhibitorDni").value.trim(),
-          exhibitorSignatureBase64: hasExhibitorSignature ? canvas.toDataURL("image/png") : ""
+          exhibitorSignatureBase64: hasExhibitorSignature ? getCompressedSignatureBase64() : ""
         };
 
         const result = await postJson(payload);
@@ -641,6 +641,24 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function getCompressedSignatureBase64() {
+      const output = document.createElement("canvas");
+      const maxWidth = 500;
+      const maxHeight = 180;
+    
+      output.width = maxWidth;
+      output.height = maxHeight;
+    
+      const outCtx = output.getContext("2d");
+    
+      outCtx.fillStyle = "#ffffff";
+      outCtx.fillRect(0, 0, maxWidth, maxHeight);
+    
+      outCtx.drawImage(canvas, 0, 0, maxWidth, maxHeight);
+    
+      return output.toDataURL("image/jpeg", 0.65);
     }
 
     document.getElementById("btnBuscar").addEventListener("click", searchAttendance);
