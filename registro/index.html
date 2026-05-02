@@ -344,15 +344,18 @@
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload)
   });
+  return response.json();
+}
 
-  const text = await response.text();
+    async function apiSubmitNoCors(payload) {
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
 
-  try {
-    return JSON.parse(text);
-  } catch (error) {
-    console.error("Respuesta no JSON:", text);
-    throw new Error("EL REGISTRO SE GUARDÓ, PERO LA RESPUESTA DEL SERVIDOR NO FUE JSON.");
-  }
+  return { ok: true };
 }
 
     async function loadData() {
@@ -406,7 +409,7 @@
       };
 
       try {
-        const result = await apiCall(payload);
+        const result = await apiSubmitNoCors(payload);
         if (result.ok) {
           const fullName = `${payload.firstName} ${payload.lastName}`;
           showStatus(`${fullName}, GRACIAS POR REGISTRAR SU CAPACITACIÓN`, "success");
