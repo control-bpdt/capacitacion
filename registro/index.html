@@ -165,10 +165,31 @@
     }
 
     .msg.visible { display: block; }
-    .msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .msg.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
     .msg.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
     .msg.loading { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
 
+    @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+    
   </style>
 </head>
 <body>
@@ -379,7 +400,8 @@
       try {
         const result = await apiCall(payload);
         if (result.ok) {
-          showStatus("REGISTRADO CON ÉXITO.", "success");
+          const fullName = `${payload.firstName} ${payload.lastName}`;
+          showStatus(`${fullName}, GRACIAS POR REGISTRAR SU CAPACITACIÓN`, "success");
           form.reset();
           clearSignature();
           setTimeout(() => message.className = "msg", 5000);
