@@ -339,13 +339,21 @@
     }
 
     async function apiCall(payload) {
-      const response = await fetch(WEB_APP_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-      return response.json();
-    }
+  const response = await fetch(WEB_APP_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await response.text();
+
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    console.error("Respuesta no JSON:", text);
+    throw new Error("EL REGISTRO SE GUARDÓ, PERO LA RESPUESTA DEL SERVIDOR NO FUE JSON.");
+  }
+}
 
     async function loadData() {
       try {
@@ -409,7 +417,7 @@
           throw new Error(result.error);
         }
       } catch (err) {
-        showStatus("ERROR: " + err.message.toUpperCase(), "error");
+        showStatus(err.message.toUpperCase(), "error");
       } finally {
         submitBtn.disabled = false;
       }
